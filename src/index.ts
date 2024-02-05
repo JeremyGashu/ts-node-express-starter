@@ -2,8 +2,10 @@
 import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
+import cors from "cors";
 import { stream } from "./logger/logger";
 import { initAllAppRoutes } from "./router";
+import { rateLimitMiddleware } from "./middleware/rateLimitMiddleware";
 
 dotenv.config();
 
@@ -12,6 +14,8 @@ const port = process.env.PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors());
+app.use(rateLimitMiddleware);
 app.use(morgan('combined', { stream: stream }));
 initAllAppRoutes(app);
 // app.get("/", (_req: Request, res: Response) => {

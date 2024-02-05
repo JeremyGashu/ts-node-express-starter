@@ -8,7 +8,7 @@ class UsersRepo {
   }
 
   /*
-    @desc : Returns all applicants in the database
+    @desc : Returns all users in the database
     @params: no-param
     @role : system admin
   */
@@ -18,7 +18,7 @@ class UsersRepo {
 
   /*
     @desc: create new eucation record
-    @params: ApplicantCreateInput [Prisma] 
+    @params: TUserCreateInput
     @role: -
   */
   CreateNewUsers = async (user: TUser) => {

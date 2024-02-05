@@ -1,8 +1,8 @@
-import { TUser } from "../types/users";
+import { TUser } from '../types/users';
 
 class UsersRepo {
   users: TUser[];
-  
+
   constructor() {
     this.users = [];
   }
@@ -22,11 +22,10 @@ class UsersRepo {
     @role: -
   */
   CreateNewUsers = async (user: TUser) => {
-    console.log("New user added to the list");
+    console.log('New user added to the list');
     this.users.push(user);
     return user;
   };
-
 }
 
 export const getYearDiff = (date1: Date, date2: Date) => {

@@ -1,5 +1,5 @@
 // src/index.js
-import express, { Request, Response } from "express";
+import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import { stream } from "./logger/logger";

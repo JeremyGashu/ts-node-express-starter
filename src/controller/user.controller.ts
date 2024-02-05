@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response,} from "express";
 import userRepo from "../repository/user.repo";
 
 export default class UserCtrl {
@@ -10,7 +10,6 @@ export default class UserCtrl {
   GetAllUsers = async (
     req: Request,
     res: Response,
-    next: NextFunction
   ) => {
     userRepo.GetAllUsers()
       .then((users) => {
@@ -31,7 +30,7 @@ export default class UserCtrl {
   /*
     creates new user record
   */
-  CreateNewUser = async (req: Request, res: Response, next: NextFunction) => {
+  CreateNewUser = async (req: Request, res: Response) => {
     
     userRepo.CreateNewUsers(req.body)
       .then((user) => {

@@ -12,10 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "-": "^0.0.1",
-    "@types/winston": "^2.4.4",
     "cors": "^2.8.5",
-    "D": "^1.0.0",
     "dotenv": "^16.4.1",
     "express": "^4.18.2",
     "joi": "^17.12.1",
@@ -28,7 +25,13 @@
     "@types/joi": "^17.2.3",
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.11.16",
+    "@types/winston": "^2.4.4",
+    "@typescript-eslint/eslint-plugin": "^6.20.0",
+    "@typescript-eslint/parser": "^6.20.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
     "nodemon": "^3.0.3",
+    "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }

@@ -3,7 +3,7 @@ import winston from "winston";
 const options = {
   file: {
     level: "info",
-    filename: `../../logs/logs.log`,
+    filename: `./logs.log`,
     handleExceptions: true,
     maxsize: 5242880, // 5MB
     maxFiles: 5,
@@ -30,8 +30,8 @@ export const logger = winston.createLogger({
   exitOnError: false, // do not exit on handled exceptions
 });
 
-export class LoggerStream {
-    write(message: string) {
-        logger.info(message.substring(0, message.lastIndexOf('\n')));
-    }
-}
+export const stream = {
+    write: (message: any) => {
+      logger.info(message);
+    },
+  };

@@ -1,8 +1,9 @@
 import { Router } from "express";
 import UserCtrl from "../controller/user.controller";
 import { TypeValidator } from "../validators";
-import { SUserSchema, TUser } from "../types/users";
-const TValidator = new TypeValidator<TUser>();
+import { SUserSchema, } from "../types/users";
+import { Prisma } from "@prisma/client";
+const TValidator = new TypeValidator<Prisma.UserCreateInput>();
 class UserRoute {
   router = Router();
   userController = new UserCtrl();

@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(morgan('default', { stream: stream }));
+app.use(morgan('combined', { stream: stream }));
 initAllAppRoutes(app);
 // app.get("/", (_req: Request, res: Response) => {
 //   res.status(200).json({msg: "Express and TypeScript starter!"});

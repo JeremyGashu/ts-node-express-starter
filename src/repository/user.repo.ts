@@ -1,11 +1,9 @@
-import { TUser } from '../types/users';
+import PClient, { Prisma } from '@prisma/client'
+
+const prisma = new PClient.PrismaClient()
 
 class UsersRepo {
-  users: TUser[];
 
-  constructor() {
-    this.users = [];
-  }
 
   /*
     @desc : Returns all users in the database
@@ -13,23 +11,19 @@ class UsersRepo {
     @role : system admin
   */
   GetAllUsers = async () => {
-    return await this.users;
+    return await prisma.user.findMany();
   };
 
   /*
     @desc: create new eucation record
-    @params: TUserCreateInput
+    @params: Prisma.UserCreateInput
     @role: -
   */
-  CreateNewUsers = async (user: TUser) => {
-    console.log('New user added to the list');
-    this.users.push(user);
-    return user;
+  CreateNewUsers = async (user: Prisma.UserCreateInput) => {
+    const response = await prisma.user.create({data : user});
+    return response;
   };
 }
 
-export const getYearDiff = (date1: Date, date2: Date) => {
-  return Math.abs(date2.getFullYear() - date1.getFullYear());
-};
 
 export default new UsersRepo();

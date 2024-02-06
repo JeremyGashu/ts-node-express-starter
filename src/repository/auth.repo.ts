@@ -17,7 +17,7 @@ class AuthRepo {
       { userId: user.id },
       process.env.JWT_ACCESS_SECRET as string,
       {
-        expiresIn: '1m',
+        expiresIn: '15m',
       },
     );
   };

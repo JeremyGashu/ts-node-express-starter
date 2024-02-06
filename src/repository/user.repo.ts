@@ -8,8 +8,16 @@ class UsersRepo {
     @description : Returns all users in the database
     @params: User
   */
-  GetAllUsers = async (): Promise<User[]> => {
-    return await prisma.user.findMany();
+  GetAllUsers = async (
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<User[]> => {
+    page = page || 1;
+    limit = limit || 10;
+    return await prisma.user.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
   };
 
   /**

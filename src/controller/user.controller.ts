@@ -14,7 +14,13 @@ export default class UserCtrl {
   */
   GetAllUsers = async (req: Request, res: Response) => {
     try {
-      const users = await userRepo.GetAllUsers();
+      const { limit, page } = req.query;
+      const parsedLimit = Math.abs(Number(limit) || 10);
+      const parsedPage = Math.abs(Number(page) || 1);
+      const users = await userRepo.GetAllUsers(
+        Number(parsedPage),
+        Number(parsedLimit),
+      );
       res.status(200).json({
         success: true,
         users: excludeFieldFromListOfObject(users, 'password'),

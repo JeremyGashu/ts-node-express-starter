@@ -2,7 +2,11 @@ import { Request, Response } from 'express';
 import userRepo from '../repository/user.repo';
 import { Prisma, User } from '@prisma/client';
 import { randomUUID } from 'crypto';
-import { addRefreshTokenToWhitelist, generateTokens } from '../utils/auth';
+import {
+  excludeFieldFromListOfObject,
+  excludeFieldFromSingleObject,
+} from '../utils/exclude';
+import authRepo from '../repository/auth.repo';
 
 export default class UserCtrl {
   /*
@@ -13,7 +17,7 @@ export default class UserCtrl {
       const users = await userRepo.GetAllUsers();
       res.status(200).json({
         success: true,
-        users: users,
+        users: excludeFieldFromListOfObject(users, 'password'),
       });
     } catch (err) {
       console.log(err);
@@ -40,13 +44,16 @@ export default class UserCtrl {
       const user = await userRepo.CreateNewUsers(req.body);
       if (user) {
         const jti = randomUUID();
-        const { accessToken, refreshToken } = generateTokens(user, jti);
+        const { accessToken, refreshToken } = authRepo.GenerateTokens(
+          user,
+          jti,
+        );
         console.log('******access token****', accessToken);
-        await addRefreshTokenToWhitelist(jti, refreshToken, user.id);
+        await authRepo.AddRefreshTokenToWhitelist(jti, refreshToken, user.id);
 
         return res.status(200).json({
           success: true,
-          user,
+          user: excludeFieldFromSingleObject(user, 'password'),
           auth: { accessToken, refreshToken },
         });
       }
@@ -98,12 +105,6 @@ export default class UserCtrl {
       return res.status(401).json({
         success: false,
         errors: ['User ID cannot be empty.'],
-      });
-    }
-    if (isNaN(Number(id))) {
-      return res.status(401).json({
-        success: false,
-        errors: ['User ID must be an integer number number!'],
       });
     }
 

@@ -1,11 +1,12 @@
 // src/index.js
-import express from "express";
-import dotenv from "dotenv";
-import morgan from "morgan";
-import cors from "cors";
-import { stream } from "./logger/logger";
-import { initAllAppRoutes } from "./router";
-import { rateLimitMiddleware } from "./middleware/rateLimitMiddleware";
+import express from 'express';
+import dotenv from 'dotenv';
+import morgan from 'morgan';
+import cors from 'cors';
+import { stream } from './logger/logger';
+import 'dotenv/config';
+import { initAllAppRoutes } from './router';
+import { rateLimitMiddleware } from './middleware/rateLimitMiddleware';
 
 dotenv.config();
 

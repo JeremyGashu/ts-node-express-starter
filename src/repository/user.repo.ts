@@ -4,17 +4,16 @@ import bcrypt from 'bcrypt';
 const prisma = new PClient.PrismaClient();
 
 class UsersRepo {
-  /*
-    @desc : Returns all users in the database
-    @params: no-param
-    @role : system admin
+  /**
+    @description : Returns all users in the database
+    @params: User
   */
   GetAllUsers = async (): Promise<User[]> => {
     return await prisma.user.findMany();
   };
 
-  /*
-    @desc: create new eucation record
+  /**
+    @description: create new user record
     @params: Prisma.UserCreateInput
     @role: -
   */
@@ -25,8 +24,8 @@ class UsersRepo {
     return response;
   };
 
-  /*
-    @desc: Delete a single user
+  /**
+    @description: Delete a single user
     @params: id
     @role:  -
   */
@@ -38,8 +37,8 @@ class UsersRepo {
     return response;
   };
 
-  /*
-    @desc: updates existing user information
+  /**
+    @description: updates existing user information
     @params: UserUpdateInput [Prisma] 
     @role: -
   */
@@ -54,8 +53,8 @@ class UsersRepo {
     return response;
   };
 
-  /*
-    @desc: returns a user registered with a given email
+  /**
+    @description: returns a user registered with a given email
     @params: email as string
     @role: -
   */
@@ -67,8 +66,8 @@ class UsersRepo {
     });
     return user;
   };
-  /*
-    @desc: returns a user registered with a given id
+  /**
+    @description: returns a user registered with a given id
     @params: id as number
     @role: -
   */

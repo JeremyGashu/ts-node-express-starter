@@ -6,7 +6,8 @@ const prisma = new PClient.PrismaClient();
 class UsersRepo {
   /**
     @description : Returns all users in the database
-    @params: User
+    @param page data page
+    @param limit limit to take the data
   */
   GetAllUsers = async (
     page: number = 1,
@@ -22,7 +23,7 @@ class UsersRepo {
 
   /**
     @description: create new user record
-    @params: Prisma.UserCreateInput
+    @param user user data reference saved in database
     @role: -
   */
   CreateNewUsers = async (user: Prisma.UserCreateInput): Promise<User> => {
@@ -34,7 +35,7 @@ class UsersRepo {
 
   /**
     @description: Delete a single user
-    @params: id
+    @param id - user id saved in database
     @role:  -
   */
 
@@ -47,8 +48,8 @@ class UsersRepo {
 
   /**
     @description: updates existing user information
-    @params: UserUpdateInput [Prisma] 
-    @role: -
+    @param id - the user id
+    @param data - the new information to change from the user
   */
   UpdateUser = async (
     id: string,
@@ -63,7 +64,7 @@ class UsersRepo {
 
   /**
     @description: returns a user registered with a given email
-    @params: email as string
+    @param email - the user email saved in db
     @role: -
   */
   GetUserByEmail = async (email: string): Promise<User | null> => {
@@ -76,7 +77,7 @@ class UsersRepo {
   };
   /**
     @description: returns a user registered with a given id
-    @params: id as number
+    @param id - the user id saved in db
     @role: -
   */
   GetUserById = async (id: string): Promise<User | null> => {

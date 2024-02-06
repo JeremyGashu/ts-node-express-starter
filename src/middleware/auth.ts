@@ -1,6 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import 'dotenv/config';
+
+/**
+ * Checks if the request sender is an authenticated user.
+ * @param req - express Request object
+ * @param res - express Response object
+ * @param next - express NextFunction handler
+ * @returns void
+ */
 export const isAuthenticated = (
   req: Request,
   res: Response,

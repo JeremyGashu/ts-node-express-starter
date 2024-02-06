@@ -1,4 +1,4 @@
-import PClient, { Prisma } from '@prisma/client'
+import PClient, { Prisma, User } from '@prisma/client'
 
 const prisma = new PClient.PrismaClient()
 
@@ -20,7 +20,21 @@ class UsersRepo {
     @role: -
   */
   CreateNewUsers = async (user: Prisma.UserCreateInput) => {
-    const response = await prisma.user.create({data : user});
+    const response: User = await prisma.user.create({data : user});
+    return response;
+  };
+
+    /*
+    @desc: Delete a single user
+    @params: id
+    @role:  -
+  */
+
+  // ! Deleting Applicant requires cascading - in education, experience etc...
+  DeleteApplicant = async (id: number) => {
+    const response: User = await prisma.user.delete({
+      where: { id },
+    });
     return response;
   };
 }

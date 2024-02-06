@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import userRepo from '../repository/user.repo';
+import { Prisma, User } from '@prisma/client';
 
 export default class UserCtrl {
   /*
@@ -65,7 +66,7 @@ export default class UserCtrl {
     }
 
     try {
-      await userRepo.DeleteApplicant(Number(id));
+      await userRepo.DeleteUser(Number(id));
       res.status(200).json({
         success: true,
       });
@@ -73,7 +74,43 @@ export default class UserCtrl {
       console.log(err);
       res.status(500).json({
         success: false,
-        errors: ['Could not find applicant!'],
+        errors: ['Could not find user!'],
+      });
+    }
+  };
+
+  /*
+    Update existing user from database
+  */
+  UpdateUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(401).json({
+        success: false,
+        errors: ['User ID cannot be empty.'],
+      });
+    }
+    if (isNaN(Number(id))) {
+      return res.status(401).json({
+        success: false,
+        errors: ['User ID must be an integer number number!'],
+      });
+    }
+
+    try {
+      const user: User = await userRepo.UpdateUser(
+        Number(id),
+        req.body as Prisma.UserUpdateInput,
+      );
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({
+        success: false,
+        errors: ['Could not find user!'],
       });
     }
   };

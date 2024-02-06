@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import UserCtrl from '../controller/user.controller';
 import { TypeValidator } from '../validators';
-import { SUserSchema } from '../types/users';
+import { SUserUpdateSchema } from '../types/users';
 import { Prisma } from '@prisma/client';
 const TValidator = new TypeValidator<Prisma.UserCreateInput>();
 class UserRoute {
@@ -22,13 +22,22 @@ class UserRoute {
     this.router
       .route('/')
       .post(
-        TValidator.validate(SUserSchema),
+        TValidator.validate(SUserUpdateSchema),
         this.userController.CreateNewUser,
       );
 
     // DELETE EXISTING USER - api/users/:id
     // [GET]
     this.router.route('/:id').delete(this.userController.DeleteUser);
+
+    // PATCH UPDATE EXISTING USER - api/users/:id
+    // [PATCH]
+    this.router
+      .route('/:id')
+      .patch(
+        TValidator.validate(SUserUpdateSchema),
+        this.userController.UpdateUser,
+      );
   }
 }
 export default new UserRoute().router;

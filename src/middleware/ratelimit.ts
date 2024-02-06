@@ -1,9 +1,9 @@
-import rateLimit from "express-rate-limit";
+import rateLimit from 'express-rate-limit';
 
 // Rate limit middleware
 export const rateLimitMiddleware = rateLimit({
   windowMs: 60 * 1000,
   max: 20,
-  message: "You have exceeded your 20 requests per minute limit.",
+  message: 'You have exceeded your 20 requests per minute limit.',
   headers: true,
 });

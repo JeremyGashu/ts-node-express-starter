@@ -6,7 +6,7 @@ import cors from 'cors';
 import { stream } from './logger/logger';
 import 'dotenv/config';
 import { initAllAppRoutes } from './router';
-import { rateLimitMiddleware } from './middleware/rateLimitMiddleware';
+import { rateLimitMiddleware } from './middleware/ratelimit';
 
 dotenv.config();
 

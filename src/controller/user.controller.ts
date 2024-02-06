@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import userRepo from '../repository/user.repo';
 import { Prisma, User } from '@prisma/client';
 import { randomUUID } from 'crypto';
@@ -7,19 +7,19 @@ import {
   excludeFieldFromSingleObject,
 } from '../utils/exclude';
 import authRepo from '../repository/auth.repo';
+import { IPaginatedRequest } from '../types/typedef/pagination';
 
 export default class UserCtrl {
   /*
     returns all users
   */
-  GetAllUsers = async (req: Request, res: Response) => {
+  GetAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { limit, page } = req.query;
-      const parsedLimit = Math.abs(Number(limit) || 10);
-      const parsedPage = Math.abs(Number(page) || 1);
+      req = req as IPaginatedRequest;
+      console.log(next);
       const users = await userRepo.GetAllUsers(
-        Number(parsedPage),
-        Number(parsedLimit),
+        (req as IPaginatedRequest).page,
+        (req as IPaginatedRequest).limit,
       );
       res.status(200).json({
         success: true,

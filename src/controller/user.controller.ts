@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import userRepo from '../repository/user.repo';
 import { Prisma, User } from '@prisma/client';
+import { randomUUID } from 'crypto';
+import { addRefreshTokenToWhitelist, generateTokens } from '../utils/auth';
 
 export default class UserCtrl {
   /*
@@ -27,11 +29,25 @@ export default class UserCtrl {
   */
   CreateNewUser = async (req: Request, res: Response) => {
     try {
+      const email: string = req.body.email;
+      const userExists = await userRepo.GetUserByEmail(email);
+      if (userExists) {
+        return res.status(422).json({
+          success: false,
+          errors: ['User already registered with this Email!'],
+        });
+      }
       const user = await userRepo.CreateNewUsers(req.body);
       if (user) {
+        const jti = randomUUID();
+        const { accessToken, refreshToken } = generateTokens(user, jti);
+        console.log('******access token****', accessToken);
+        await addRefreshTokenToWhitelist(jti, refreshToken, user.id);
+
         return res.status(200).json({
           success: true,
           user,
+          auth: { accessToken, refreshToken },
         });
       }
       res.status(422).json({
@@ -58,15 +74,9 @@ export default class UserCtrl {
         errors: ['User ID cannot be empty.'],
       });
     }
-    if (isNaN(Number(id))) {
-      return res.status(401).json({
-        success: false,
-        errors: ['User ID must be an integer number number!'],
-      });
-    }
 
     try {
-      await userRepo.DeleteUser(Number(id));
+      await userRepo.DeleteUser(id);
       res.status(200).json({
         success: true,
       });
@@ -99,7 +109,7 @@ export default class UserCtrl {
 
     try {
       const user: User = await userRepo.UpdateUser(
-        Number(id),
+        id,
         req.body as Prisma.UserUpdateInput,
       );
       res.status(200).json({

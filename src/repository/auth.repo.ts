@@ -17,7 +17,7 @@ class AuthRepo {
       { userId: user.id },
       process.env.JWT_ACCESS_SECRET as string,
       {
-        expiresIn: '30m',
+        expiresIn: '1m',
       },
     );
   };
@@ -27,11 +27,11 @@ class AuthRepo {
    * You can change this value depending on your app logic.
    * I would go for a maximum of 7 days, and make him login again after 7 days of inactivity.
    */
-  GenerateRefreshToken = (user: User, jti: string): string => {
+  GenerateRefreshToken = (user: User, tokenId: string): string => {
     return jwt.sign(
       {
         userId: user.id,
-        jti,
+        tokenId,
       },
       process.env.JWT_REFRESH_SECRET as string,
       {
@@ -46,9 +46,9 @@ class AuthRepo {
    * @params: id as string which is the user id
    * @role: -
    */
-  GenerateTokens = (user: User, jti: string): TUserAuth => {
+  GenerateTokens = (user: User, tokenId: string): TUserAuth => {
     const accessToken = this.GenerateAccessToken(user);
-    const refreshToken = this.GenerateRefreshToken(user, jti);
+    const refreshToken = this.GenerateRefreshToken(user, tokenId);
 
     return {
       accessToken,
@@ -57,11 +57,11 @@ class AuthRepo {
   };
   /**
    * @description: Used to hash the user token
-   * @params: jti
+   * @params: token id
    * @role: -
    */
-  HashToken = (jti: string): string => {
-    return crypto.createHash('sha512').update(jti).digest('hex');
+  HashToken = (tokenId: string): string => {
+    return crypto.createHash('sha512').update(tokenId).digest('hex');
   };
 
   /**
@@ -70,13 +70,13 @@ class AuthRepo {
    * @role: -
    */
   AddRefreshTokenToWhitelist = (
-    jti: string,
+    tokenId: string,
     refreshToken: string,
     userId: string,
   ) => {
     return prisma.refreshToken.create({
       data: {
-        id: jti,
+        id: tokenId,
         hashedToken: this.HashToken(refreshToken),
         userId,
         revoked: false,

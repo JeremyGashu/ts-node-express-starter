@@ -39,13 +39,13 @@ export default class AuthCtrl {
         });
       }
 
-      const jti = randomUUID();
+      const tokenId = randomUUID();
       const { accessToken, refreshToken } = authRepo.GenerateTokens(
         existingUser,
-        jti,
+        tokenId,
       );
       await authRepo.AddRefreshTokenToWhitelist(
-        jti,
+        tokenId,
         refreshToken,
         existingUser.id,
       );
@@ -76,7 +76,7 @@ export default class AuthCtrl {
         process.env.JWT_REFRESH_SECRET as string,
       ) as JwtPayload;
       const savedRefreshToken = await authRepo.FindRefreshTokenById(
-        payload.jti as string,
+        payload.tokenId as string,
       );
 
       if (!savedRefreshToken || savedRefreshToken.revoked === true) {
@@ -103,10 +103,14 @@ export default class AuthCtrl {
       }
 
       await authRepo.DeleteRefreshToken(savedRefreshToken.id);
-      const jti = randomUUID();
+      const tokenId = randomUUID();
       const { accessToken, refreshToken: newRefreshToken } =
-        authRepo.GenerateTokens(user, jti);
-      await authRepo.AddRefreshTokenToWhitelist(jti, newRefreshToken, user.id);
+        authRepo.GenerateTokens(user, tokenId);
+      await authRepo.AddRefreshTokenToWhitelist(
+        tokenId,
+        newRefreshToken,
+        user.id,
+      );
 
       return res.status(200).json({
         accessToken,

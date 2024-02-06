@@ -3,6 +3,7 @@ import UserCtrl from '../controller/user.controller';
 import { TypeValidator } from '../validators';
 import { SUserCreateSchema, SUserUpdateSchema } from '../types/schema/users';
 import { Prisma } from '@prisma/client';
+import { isAuthenticated } from '../middleware/auth';
 const TValidator = new TypeValidator<Prisma.UserCreateInput>();
 class UserRoute {
   router = Router();
@@ -15,7 +16,9 @@ class UserRoute {
   intializeRoutes() {
     // GET ALL USERS - api/users
     // [GET]
-    this.router.route('/').get(this.userController.GetAllUsers);
+    this.router
+      .route('/')
+      .get(isAuthenticated, this.userController.GetAllUsers);
 
     // POST CREATE NEW USER - api/users
     // [POST]

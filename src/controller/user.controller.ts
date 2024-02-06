@@ -43,13 +43,17 @@ export default class UserCtrl {
       }
       const user = await userRepo.CreateNewUsers(req.body);
       if (user) {
-        const jti = randomUUID();
+        const tokenId = randomUUID();
         const { accessToken, refreshToken } = authRepo.GenerateTokens(
           user,
-          jti,
+          tokenId,
         );
         console.log('******access token****', accessToken);
-        await authRepo.AddRefreshTokenToWhitelist(jti, refreshToken, user.id);
+        await authRepo.AddRefreshTokenToWhitelist(
+          tokenId,
+          refreshToken,
+          user.id,
+        );
 
         return res.status(200).json({
           success: true,
